@@ -2,6 +2,7 @@ mod init;
 mod core;
 mod commands;
 mod commit;
+mod log;
 
 use std::fs::create_dir_all;
 use crate::init::init_repo;
@@ -89,6 +90,12 @@ fn main() {
                 },
                 Err(why) => eprintln!("No se pudo cargar la imagen: {why}"),
             }
-        }
+        },
+        Commands::Log => {
+            match log::log_commits() {
+                Ok(()) => println!("Historial de commits mostrado correctamente."),
+                Err(why) => eprintln!("Error al mostrar el historial de commits: {why}"),
+            }
+        },
     }
 }

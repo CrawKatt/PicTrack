@@ -19,4 +19,5 @@ pub enum Commands {
         #[arg(help = "Mensaje del commit")]
         message: String,
     },
+    Log,
 }
