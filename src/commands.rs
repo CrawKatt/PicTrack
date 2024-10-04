@@ -20,4 +20,22 @@ pub enum Commands {
         message: String,
     },
     Log,
+    Branch {
+        #[arg(help = "Nombre de la rama (si se proporciona)")]
+        name: Option<String>,
+    },
+    Checkout {
+        #[arg(help = "Nombre de la rama a la cual cambiar")]
+        branch: String,
+    },
+    CurrentBranch,
+    Merge {
+        #[arg(help = "Nombre de la rama a fusionar con la actual")]
+        source_branch: String,
+    },
+    Status,
+    Reset {
+        #[arg(help = "Hash del commit a eliminar")]
+        commit_hash: String,
+    }
 }

@@ -1,32 +1,30 @@
-use std::{fs, io};
-use std::path::Path;
+// En `init.rs`
+use std::fs::{self, File};
 use std::io::Write;
+use std::path::Path;
+use std::io;
 
 pub fn init_repo() -> io::Result<()> {
-    // Directorio principal oculto del repositorio
     let repo_path = Path::new(".images");
+    let branches_dir = repo_path.join("branches");
 
-    // Verificar si el directorio ya existe
+    // Verificar si el repositorio ya ha sido inicializado
     if repo_path.exists() {
-        println!("El repositorio de imágenes ya ha sido inicializado.");
+        eprintln!("El repositorio ya ha sido inicializado.");
         return Ok(());
     }
 
-    // Crear el directorio .images
-    fs::create_dir(repo_path)?;
+    // Crear la estructura del repositorio
+    fs::create_dir_all(&branches_dir)?;
 
-    // Crear los subdirectorios dentro de .images
-    fs::create_dir(repo_path.join("objects"))?;
-    fs::create_dir(repo_path.join("commits"))?;
+    // Crear la rama principal (main)
+    let main_branch = branches_dir.join("main");
+    fs::create_dir_all(&main_branch)?;
 
-    // Crear un archivo de configuración inicial
-    let config_path = repo_path.join("config");
-    let mut config_file = fs::File::create(config_path)?;
-    writeln!(config_file, "[config]")?;
-    writeln!(config_file, "repository_type = image_repo")?;
-    writeln!(config_file, "repository_name = my_image_repo")?;
-    writeln!(config_file, "author = John Doe")?;
+    // Apuntar el HEAD a la rama principal
+    let mut head_file = File::create(".images/HEAD")?;
+    writeln!(head_file, "ref: branches/main")?;
 
-    println!("Repositorio de imágenes inicializado correctamente en .images/");
+    println!("Repositorio inicializado correctamente.");
     Ok(())
 }
