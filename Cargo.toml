@@ -1,0 +1,11 @@
+[package]
+name = "picktrack"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+image = "0.25.2"
+clap = { version = "4.5.19", features = ["derive"] }
+clap_derive = "4.5.18"
+chrono = "0.4.38"
+sha2 = "0.10.8"
