@@ -2,14 +2,21 @@ mod init;
 mod core;
 mod commands;
 mod commit;
+mod log;
+mod branch;
+mod checkout;
+mod current_branch;
+mod status;
+mod reset;
+mod merge;
 
-use std::fs::create_dir_all;
-use crate::init::init_repo;
-use clap::Parser;
-use std::path::Path;
 use crate::commands::Commands;
 use crate::commit::create_commit;
 use crate::core::{compare_images, generate_image_hash, load_image, save_image, Cli};
+use crate::init::init_repo;
+use clap::Parser;
+use std::fs::create_dir_all;
+use std::path::Path;
 
 fn main() {
     let cli = Cli::parse();
@@ -55,7 +62,7 @@ fn main() {
                 println!("Las imágenes son diferentes.");
             }
         },
-        Commands::Commit { path, message} => {
+        Commands::Commit { path, message } => {
             let img_path = Path::new(path);
 
             match load_image(&img_path) {
@@ -89,6 +96,49 @@ fn main() {
                 },
                 Err(why) => eprintln!("No se pudo cargar la imagen: {why}"),
             }
-        }
+        },
+        Commands::Log => {
+            match log::log_commits() {
+                Ok(()) => println!("Historial de commits mostrado correctamente."),
+                Err(why) => eprintln!("Error al mostrar el historial de commits: {why}"),
+            }
+        },
+        Commands::Branch { name } => {
+            match branch::handle_branch(name.clone()) {
+                Ok(()) => println!("Comando branch ejecutado."),
+                Err(why) => eprintln!("Error al manejar las ramas: {why}"),
+            }
+        },
+        Commands::Checkout { branch } => {
+            match checkout::checkout_branch(branch) {
+                Ok(()) => println!("Cambiado a la rama '{}'.", branch),
+                Err(why) => eprintln!("Error al cambiar de rama: {why}"),
+            }
+        },
+        Commands::CurrentBranch => {
+            match current_branch::current_branch() {
+                Ok(branch) => println!("Rama actual: {}", branch),
+                Err(why) => eprintln!("Error: {}", why),
+            }
+        },
+        // Agregar los nuevos comandos
+        Commands::Merge { source_branch } => {
+            match merge::merge_branch(source_branch) {
+                Ok(()) => println!("Fusión completada con éxito."),
+                Err(why) => eprintln!("Error al fusionar ramas: {why}"),
+            }
+        },
+        Commands::Status => {
+            match status::status() {
+                Ok(()) => println!("Estado del repositorio mostrado correctamente."),
+                Err(why) => eprintln!("Error al mostrar el estado del repositorio: {why}"),
+            }
+        },
+        Commands::Reset { commit_hash } => {
+            match reset::reset_commit(commit_hash) {
+                Ok(()) => println!("Commit {commit_hash} eliminado."),
+                Err(why) => eprintln!("Error al eliminar el commit {commit_hash}: {why}"),
+            }
+        },
     }
 }

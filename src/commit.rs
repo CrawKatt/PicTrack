@@ -1,19 +1,21 @@
-use std::fs::{create_dir_all, File};
-use std::path::Path;
-use chrono::Utc;
+use crate::branch::BRANCHES_DIR;
+use crate::current_branch::current_branch;
+use std::fs::File;
+use std::io;
 use std::io::Write;
+use std::path::Path;
 
-pub fn create_commit(hash: &str, message: &str) -> std::io::Result<()> {
-    // Crear el archivo de commit en .images/commits
-    let commit_dir = Path::new(".images/commits");
-    create_dir_all(commit_dir).expect("No se pudo crear el directorio de commits");
+pub fn create_commit(hash: &str, message: &str) -> io::Result<()> {
+    // Obtener la rama actual
+    let branch = current_branch()?;
 
-    let commit_file_path = commit_dir.join(format!("{}.txt", hash));
+    // Crear el archivo de commit en la rama correspondiente
+    let branch_dir = Path::new(BRANCHES_DIR).join(branch);
+    let commit_file_path = branch_dir.join(format!("{hash}.txt"));
+
     let mut commit_file = File::create(commit_file_path)?;
 
-    // Obtener la fecha y hora actual
-    let now = Utc::now();
-
+    let now = chrono::Utc::now();
     writeln!(commit_file, "commit: {hash}")?;
     writeln!(commit_file, "date: {now}")?;
     writeln!(commit_file, "message: {message}")?;
