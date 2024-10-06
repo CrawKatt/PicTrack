@@ -1,7 +1,7 @@
-use crate::current_branch::current_branch;
 use std::fs::{self};
 use std::io::{self};
 use std::path::Path;
+use crate::commands::current_branch::current_branch;
 
 pub const BRANCHES_DIR: &str = ".images/branches";
 pub const HEAD_FILE: &str = ".images/HEAD";

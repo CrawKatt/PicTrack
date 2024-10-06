@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io;
 use std::io::{BufRead, BufReader};
-use crate::branch::HEAD_FILE;
+use crate::commands::branch::HEAD_FILE;
 
 pub fn current_branch() -> io::Result<String> {
     let head_file = File::open(HEAD_FILE)?;

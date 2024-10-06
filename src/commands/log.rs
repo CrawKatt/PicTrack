@@ -1,8 +1,8 @@
 use std::fs;
 use std::io::{self, BufRead, BufReader};
 use std::path::Path;
-use crate::current_branch::current_branch;
-use crate::branch::BRANCHES_DIR;
+use crate::commands::branch::BRANCHES_DIR;
+use crate::commands::current_branch::current_branch;
 
 // Mostrar el historial de commits de la rama actual
 pub fn log_commits() -> io::Result<()> {

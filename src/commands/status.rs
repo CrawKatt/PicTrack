@@ -1,7 +1,7 @@
 use std::fs;
 use std::io;
 use std::path::Path;
-use crate::current_branch::current_branch;
+use crate::commands::current_branch::current_branch;
 
 pub fn status() -> io::Result<()> {
     let branch = current_branch()?;
