@@ -5,7 +5,7 @@ use std::path::Path;
 use std::io;
 
 pub fn init_repo() -> io::Result<()> {
-    let repo_path = Path::new(".images");
+    let repo_path = Path::new("../../.images");
     let branches_dir = repo_path.join("branches");
 
     // Verificar si el repositorio ya ha sido inicializado

@@ -1,8 +1,8 @@
 use std::fs::File;
 use std::io;
 use std::path::Path;
-use crate::branch::{BRANCHES_DIR, HEAD_FILE};
 use std::io::Write;
+use crate::commands::branch::{BRANCHES_DIR, HEAD_FILE};
 
 pub fn checkout_branch(branch_name: &str) -> io::Result<()> {
     let branch_path = Path::new(BRANCHES_DIR).join(branch_name);

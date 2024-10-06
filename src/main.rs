@@ -1,22 +1,14 @@
-mod init;
-mod core;
 mod commands;
-mod commit;
-mod log;
-mod branch;
-mod checkout;
-mod current_branch;
-mod status;
-mod reset;
-mod merge;
 
-use crate::commands::Commands;
-use crate::commit::create_commit;
-use crate::core::{compare_images, generate_image_hash, load_image, save_image, Cli};
-use crate::init::init_repo;
+use crate::commands::{diff, Cli, Commands};
+use commands::commit::create_commit;
+use crate::commands::commit::{generate_image_hash, load_image, save_image};
+use commands::init::init_repo;
 use clap::Parser;
 use std::fs::create_dir_all;
 use std::path::Path;
+use commands::{branch, checkout, current_branch, log, merge, reset, status};
+use crate::commands::compare::compare_images;
 
 fn main() {
     let cli = Cli::parse();
@@ -138,6 +130,12 @@ fn main() {
             match reset::reset_commit(commit_hash) {
                 Ok(()) => println!("Commit {commit_hash} eliminado."),
                 Err(why) => eprintln!("Error al eliminar el commit {commit_hash}: {why}"),
+            }
+        },
+        Commands::Diff { image1, image2, output } => {
+            match diff::visual_diff(image1, image2, output) {
+                Ok(()) => println!("Diff visual completado y guardado en '{}'.", output),
+                Err(why) => eprintln!("Error al generar el diff visual: {why}"),
             }
         },
     }

@@ -1,4 +1,24 @@
-use clap_derive::Subcommand;
+use clap_derive::{Parser, Subcommand};
+
+pub mod commit;
+pub mod log;
+pub mod branch;
+pub mod checkout;
+pub mod current_branch;
+pub mod status;
+pub mod reset;
+pub mod merge;
+pub mod compare;
+pub mod init;
+pub mod diff;
+
+#[derive(Parser)]
+#[command(name = "Image Versioner")]
+#[command(about = "Sistema de control de versiones para imágenes", long_about = None)]
+pub struct Cli {
+    #[command(subcommand)]
+    pub command: Commands,
+}
 
 #[derive(Subcommand)]
 pub enum Commands {
@@ -37,5 +57,13 @@ pub enum Commands {
     Reset {
         #[arg(help = "Hash del commit a eliminar")]
         commit_hash: String,
+    },
+    Diff {
+        #[arg(help = "Primera imagen para comparar")]
+        image1: String,
+        #[arg(help = "Segunda imagen para comparar")]
+        image2: String,
+        #[arg(help = "Ruta de la imagen de salida")]
+        output: String,
     }
 }

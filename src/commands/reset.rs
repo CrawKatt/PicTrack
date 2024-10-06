@@ -1,8 +1,8 @@
 use std::fs;
 use std::io;
 use std::path::Path;
-use crate::branch::BRANCHES_DIR;
-use crate::current_branch::current_branch;
+use crate::commands::branch::BRANCHES_DIR;
+use crate::commands::current_branch::current_branch;
 
 pub fn reset_commit(commit_hash: &str) -> io::Result<()> {
     let branch = current_branch()?;
